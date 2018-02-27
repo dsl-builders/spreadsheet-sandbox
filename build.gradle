@@ -25,6 +25,7 @@ apply plugin:"asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 
 repositories {
+    jcenter()
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
 }
@@ -50,6 +51,19 @@ dependencies {
     compile 'builders.dsl:spreadsheet-builder-groovy:1.0.3'
 
     compile group: 'com.google.guava', name: 'guava', version: '24.0-jre'
+
+    compile "com.agorapulse:gru-http:0.2.2"
+    compile "com.agorapulse:gru-grails:0.2.2"
+
+    compile "com.agorapulse:dru:0.2.1"
+
+    // and pick any client
+    compile "com.agorapulse:dru-client-gorm:0.2.1"
+    compile "com.agorapulse:dru-client-dynamodb:0.2.1"
+
+    // and pick any parser
+    compile "com.agorapulse:dru-parser-json:0.2.1"
+    compile "com.agorapulse:dru-parser-yaml:0.2.1"
 
     console "org.grails:grails-console"
 

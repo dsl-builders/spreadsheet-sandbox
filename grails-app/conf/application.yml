@@ -136,24 +136,30 @@ grails:
   plugin:
     console:
       newFileText: |
-        import builders.dsl.spreadsheet.builder.poi.PoiSpreadsheetBuilder
-        import builders.dsl.spreadsheet.sandbox.Storage
+        import com.agorapulse.gru.Gru
+        import com.agorapulse.gru.http.Http
+        import org.junit.Rule
+        import spock.lang.Specification
+        import org.junit.internal.TextListener
+        import org.junit.runner.JUnitCore
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream()
+        class HttpSpec extends Specification {
 
-        PoiSpreadsheetBuilder.create(stream).build {
-            sheet('Sample') {
-                row {
-                    cell 'A'
-                    cell 'B'
-                    cell 'C'
-                }
-                row {
-                    cell 1
-                    cell 2
-                    cell 3
-                }
+            @Rule Gru<Http> gru = Gru.equip(Http.steal(this)).prepare {
+                baseUri 'http://despicableme.wikia.com'
+            }
+
+            void 'despicable me'() {
+                expect:
+                    gru.test {
+                        get "/wiki/Felonius_Gru"
+                    }
             }
         }
 
-        println ctx.getBean('grailsLinkGenerator').link(controller: 'storage', action: 'download', id: Storage.store(stream.toByteArray()), absolute: true)
+        JUnitCore junit = new JUnitCore()
+        TextListener listener = new TextListener(out)
+        junit.addListener(listener)
+        junit.run([HttpSpec].toArray(new Class[0]))
+
+        ''
